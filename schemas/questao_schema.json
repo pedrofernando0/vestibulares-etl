@@ -1,0 +1,118 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Questao",
+  "description": "Schema de validação para questões de vestibulares (ENEM, FUVEST, UNICAMP, UNESP, etc.).",
+  "type": "object",
+  "properties": {
+    "id": {
+      "type": "string",
+      "description": "Identificador único da questão. Padrão: {vestibular.lower()}-{ano}-{fase}-{numero_questao}"
+    },
+    "vestibular": {
+      "type": "string",
+      "enum": ["ENEM", "FUVEST", "UNICAMP", "UNESP", "FATEC"],
+      "description": "Nome da instituição do vestibular."
+    },
+    "ano": {
+      "type": "integer",
+      "minimum": 1900,
+      "description": "Ano de realização da prova."
+    },
+    "fase": {
+      "type": "integer",
+      "enum": [1, 2],
+      "description": "Fase do vestibular (1 ou 2)."
+    },
+    "variante_prova": {
+      "type": ["string", "null"],
+      "description": "Cor ou código do caderno de prova (Ex: 'V', 'Azul', 'Q')."
+    },
+    "numero_questao": {
+      "type": "integer",
+      "minimum": 1,
+      "description": "Número da questão no caderno de provas original."
+    },
+    "disciplina": {
+      "type": "string",
+      "description": "Disciplina principal da questão (Ex: 'Física', 'Matemática')."
+    },
+    "subtopico": {
+      "type": ["string", "null"],
+      "description": "Assunto ou tópico específico da questão (Ex: 'Cinemática', 'Geometria Analítica')."
+    },
+    "enunciado_texto": {
+      "type": "string",
+      "description": "Texto principal do enunciado da questão, formatado em Markdown com suporte a fórmulas LaTeX."
+    },
+    "enunciado_imagens": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "caminho": {
+            "type": "string",
+            "description": "Caminho relativo da imagem salva localmente em data/assets."
+          },
+          "legenda": {
+            "type": ["string", "null"]
+          }
+        },
+        "required": ["id", "caminho"]
+      },
+      "description": "Imagens, gráficos ou tabelas que fazem parte do enunciado."
+    },
+    "alternativas": {
+      "type": "array",
+      "minItems": 4,
+      "maxItems": 5,
+      "items": {
+        "type": "object",
+        "properties": {
+          "letra": {
+            "type": "string",
+            "enum": ["A", "B", "C", "D", "E"]
+          },
+          "texto": {
+            "type": "string",
+            "description": "Texto da alternativa, formatado em Markdown com suporte a LaTeX."
+          },
+          "imagem": {
+            "type": ["string", "null"],
+            "description": "Caminho da imagem específica para a alternativa (se aplicável)."
+          }
+        },
+        "required": ["letra", "texto"]
+      },
+      "description": "Opções de resposta para a questão."
+    },
+    "gabarito": {
+      "type": "string",
+      "enum": ["A", "B", "C", "D", "E", "ANULADA"],
+      "description": "A resposta correta ou indicação de anulação."
+    },
+    "anulada": {
+      "type": "boolean",
+      "default": false,
+      "description": "Indica se a questão foi oficialmente anulada."
+    },
+    "resolucao_comentada": {
+      "type": ["string", "null"],
+      "description": "Resolução passo a passo da questão, formatada em Markdown com LaTeX."
+    }
+  },
+  "required": [
+    "id",
+    "vestibular",
+    "ano",
+    "fase",
+    "numero_questao",
+    "disciplina",
+    "enunciado_texto",
+    "alternativas",
+    "gabarito",
+    "anulada"
+  ]
+}
